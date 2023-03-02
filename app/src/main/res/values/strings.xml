@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">HelloUser</string>
+    <string name="account_type">com.example.hellouser</string>
+</resources>
