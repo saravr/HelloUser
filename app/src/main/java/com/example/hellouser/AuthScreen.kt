@@ -16,15 +16,18 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 
 @Composable
-fun AuthScreen() {
+fun AuthScreen(navHostController: NavHostController) {
     val context = LocalContext.current
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
     Column(
-        modifier = Modifier.fillMaxSize().padding(top = 60.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 60.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         OutlinedTextField(
@@ -53,6 +56,7 @@ fun AuthScreen() {
 
         OutlinedButton(onClick = {
             addAccount(context, username, password, "MY_TOKEN")
+            navHostController.navigate("home")
         }) {
             Text("Sign In")
         }
@@ -63,7 +67,7 @@ fun AuthScreen() {
 @Preview(showSystemUi = true)
 @Composable
 fun PreviewAuthScreen() {
-    AuthScreen()
+    //AuthScreen()
 }
 
 fun addAccount(context: Context, username: String, password: String, authToken: String) {
