@@ -41,7 +41,7 @@ class MainActivity : ComponentActivity() {
                             HomeScreen(navController, accountsViewModel)
                         }
                         composable("auth") {
-                            AuthScreen(navHostController = navController)
+                            AuthScreen(navHostController = navController, accountsViewModel)
                         }
                     }
                 }

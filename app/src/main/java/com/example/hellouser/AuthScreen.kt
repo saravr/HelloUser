@@ -1,8 +1,7 @@
 package com.example.hellouser
 
-import android.accounts.Account
-import android.accounts.AccountManager
-import android.content.Context
+import android.app.Application
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.OutlinedButton
@@ -17,9 +16,11 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.hellouser.model.User
+import com.example.hellouser.viewmodel.AccountsViewModel
 
 @Composable
-fun AuthScreen(navHostController: NavHostController) {
+fun AuthScreen(navHostController: NavHostController, accountsViewModel: AccountsViewModel) {
     val context = LocalContext.current
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -55,24 +56,21 @@ fun AuthScreen(navHostController: NavHostController) {
         Spacer(modifier = Modifier.height(40.dp))
 
         OutlinedButton(onClick = {
-            addAccount(context, username, password, "MY_TOKEN")
-            navHostController.navigate("home")
+            try {
+                accountsViewModel.add(User(username, password, ""))
+                navHostController.navigate("home")
+            } catch (exception: Exception) {
+                Toast.makeText(context, exception.message, Toast.LENGTH_SHORT).show()
+            }
         }) {
             Text("Sign In")
         }
-
     }
 }
 
 @Preview(showSystemUi = true)
 @Composable
 fun PreviewAuthScreen() {
-    //AuthScreen()
-}
-
-fun addAccount(context: Context, username: String, password: String, authToken: String) {
-    val account = Account(username, context.getString(R.string.account_type))
-    val accountManager = AccountManager.get(context)
-    accountManager.addAccountExplicitly(account, password, null)
-    accountManager.setAuthToken(account, "TOKEN_TYPE", authToken)
+    val context = LocalContext.current
+    AuthScreen(NavHostController(context), AccountsViewModel(context as Application))
 }
