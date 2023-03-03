@@ -25,9 +25,14 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
                     val navController = rememberNavController()
-                    NavHost(navController = navController, startDestination = "home") {
+                    val fromSettings = referrer.toString() == "android-app://com.android.settings"
+                    val startDestination = if (fromSettings) "auth" else "home"
+                    NavHost(navController = navController, startDestination = startDestination) {
                         composable("home") {
                             HomeScreen(navController)
+                        }
+                        composable("auth") {
+                            AuthScreen(navHostController = navController)
                         }
                     }
                 }
